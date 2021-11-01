@@ -1,7 +1,7 @@
 {
-  "name": "rocket.chat.realtime.api.rxjs",
+  "name": "@lucabuening/rocket.chat.realtime.api.rxjs",
   "version": "0.0.0-development",
-  "description": "Abstraction for Utilizing Rocket.Chat's Realtime API Methods with RxJS",
+  "description": "Abstraction for Utilizing Rocket.Chat's Realtime API Methods with RxJS. Forked by Luca Büning",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib"
@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS.git"
+    "url": "https://github.com/lucabuening/Rocket.Chat.RealTime.API.RxJS"
   },
   "keywords": [
     "Rocket.Chat",
@@ -52,9 +52,10 @@
     "Abstraction"
   ],
   "author": "Viraj Trivedi <inf3cti0n95@gmail.com>",
+  "maintainers": ["Luca Büning <lucabuening@gmail.com>"],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS/issues"
+    "url": "https://github.com/lucabuening/Rocket.Chat.RealTime.API.RxJS/issues"
   },
-  "homepage": "https://github.com/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS#readme"
+  "homepage": "https://github.com/lucabuening/Rocket.Chat.RealTime.API.RxJS#readme"
 }
