@@ -1,11 +1,11 @@
 import { WebSocket, Server } from "mock-socket";
-import { RealTimeAPI } from "../src/index";
+import { RealTimeAPI } from "../src";
 import { SHA256 } from "crypto-js";
 import { WebSocketSubject } from "rxjs/webSocket";
 
 describe("RealTimeAPI tests", () => {
   const url = "ws://localhost:8080/";
-  let mockServer;
+  let mockServer: Server;
 
   beforeEach(() => {
     mockServer = new Server(url);
@@ -79,6 +79,9 @@ describe("RealTimeAPI tests", () => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
+          if (typeof data !== "string") {
+            return;
+          }
           let message = JSON.parse(data);
 
           expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
@@ -117,6 +120,9 @@ describe("RealTimeAPI tests", () => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
+          if (typeof data !== "string") {
+            return;
+          }
           let message = JSON.parse(data);
 
           expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
@@ -154,6 +160,9 @@ describe("RealTimeAPI tests", () => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
+          if (typeof data !== "string") {
+            return;
+          }
           let message = JSON.parse(data);
 
           expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
@@ -191,6 +200,9 @@ describe("RealTimeAPI tests", () => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
+          if (typeof data != "string") {
+            return;
+          }
           let message = JSON.parse(data);
 
           expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
@@ -224,7 +236,7 @@ describe("RealTimeAPI tests", () => {
       const username = "username";
       const password = "password";
       const addedMessageId = "some-id";
-      let resultId;
+      let resultId: any;
 
       realtimeAPI$.subscribe(); // Should send pong to every ping message.
 
@@ -232,6 +244,9 @@ describe("RealTimeAPI tests", () => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
+          if (typeof data != "string") {
+            return;
+          }
           let message = JSON.parse(data);
 
           expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
@@ -297,7 +312,7 @@ describe("RealTimeAPI tests", () => {
         message: "User not found [403]",
         errorType: "UserNotFoundError"
       };
-      let resultId;
+      let resultId: any;
 
       realtimeAPI$.subscribe(); // Should send pong to every ping message.
 
@@ -305,6 +320,9 @@ describe("RealTimeAPI tests", () => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
+          if (typeof data != "string") {
+            return;
+          }
           let message = JSON.parse(data);
 
           expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
@@ -359,6 +377,9 @@ describe("RealTimeAPI tests", () => {
       expect(socket.url).toEqual(url); // Expecting websocket url.
 
       socket.on("message", data => {
+        if (typeof data != "string") {
+          return;
+        }
         let message = JSON.parse(data);
 
         expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
@@ -472,7 +493,10 @@ describe("RealTimeAPI tests", () => {
 
       mockServer.on("connection", (socket: WebSocket) => {
         expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
-        mockServer.on("message", data => {
+        socket.on("message", data => {
+          if (typeof data !== "string") {
+            return;
+          }
           let message = JSON.parse(data);
 
           expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
@@ -509,9 +533,12 @@ describe("RealTimeAPI tests", () => {
 
         channelSubscription$.unsubscribe();
 
-        let messageId;
+        let messageId: any;
 
-        mockServer.on("message", data => {
+        socket.on("message", data => {
+          if (typeof data !== "string") {
+            return;
+          }
           let message = JSON.parse(data);
 
           if (message.msg === "sub") {
@@ -652,6 +679,9 @@ describe("RealTimeAPI tests", () => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
       socket.on("message", message => {
+        if (typeof message !== "string") {
+          return;
+        }
         expect(JSON.parse(message)).toEqual(testMessage);
         done();
       });
