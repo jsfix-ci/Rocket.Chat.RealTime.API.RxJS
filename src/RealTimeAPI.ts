@@ -10,6 +10,7 @@ import {
 import { filter, buffer, flatMap, merge, map, tap } from "rxjs/operators";
 import { v4 as uuid } from "uuid";
 import { SHA256 } from "crypto-js";
+import { Observable } from "rxjs";
 
 export class RealTimeAPI {
   public webSocket: WebSocketSubject<any>;
@@ -21,15 +22,15 @@ export class RealTimeAPI {
   /**
    * Returns the Observable to the RealTime API Socket
    */
-  public getObservable() {
+  public getObservable(): WebSocketSubject<any> {
     return this.webSocket;
   }
 
   /**
    * Disconnect the WebSocket Connection between client and RealTime API
    */
-  public disconnect() {
-    return this.webSocket.unsubscribe();
+  public disconnect(): void{
+    this.webSocket.unsubscribe();
   }
 
   /**
@@ -60,12 +61,12 @@ export class RealTimeAPI {
     messageHandler?: ((value: {}) => void) | undefined,
     errorHandler?: ((error: any) => void) | undefined,
     completionHandler?: (() => void) | undefined
-  ) {
-    this.getObservable().subscribe(
-      messageHandler,
-      errorHandler,
-      completionHandler
-    );
+  ): void {
+    this.getObservable().subscribe({
+      next: messageHandler,
+      error: errorHandler,
+      complete: completionHandler
+    });
   }
 
   /**
@@ -78,7 +79,7 @@ export class RealTimeAPI {
   /**
    * getObservableFilteredByMessageType
    */
-  public getObservableFilteredByMessageType(messageType: string) {
+  public getObservableFilteredByMessageType(messageType: string): Observable<any> {
     return this.getObservable().pipe(
       filter((message: any) => message.msg === messageType)
     );
@@ -87,7 +88,7 @@ export class RealTimeAPI {
   /**
    * getObservableFilteredByID
    */
-  public getObservableFilteredByID(id: string) {
+  public getObservableFilteredByID(id: string): Observable<any> {
     return this.getObservable().pipe(
       filter((message: any) => message.id === id)
     );
@@ -96,7 +97,7 @@ export class RealTimeAPI {
   /**
    * connectToServer
    */
-  public connectToServer() {
+  public connectToServer(): Observable<any> {
     this.sendMessage({
       msg: "connect",
       version: "1",
@@ -108,7 +109,7 @@ export class RealTimeAPI {
   /**
    * Returns an Observable to subscribe to keepAlive, Ping and Pong to the Rocket.Chat Server to Keep the Connection Alive.
    */
-  public keepAlive() {
+  public keepAlive(): Observable<any> {
     return this.getObservableFilteredByMessageType("ping").pipe(
       tap(() => this.sendMessage({ msg: "pong" }))
     );
@@ -117,7 +118,7 @@ export class RealTimeAPI {
   /**
    * Login with Username and Password
    */
-  public login(username: string, password: string) {
+  public login(username: string, password: string): Observable<any> {
     let id = uuid();
     let usernameType = username.indexOf("@") !== -1 ? "email" : "username";
     this.sendMessage({
@@ -140,7 +141,7 @@ export class RealTimeAPI {
   /**
    * Login with Authentication Token
    */
-  public loginWithAuthToken(authToken: string) {
+  public loginWithAuthToken(authToken: string): Observable<any> {
     let id = uuid();
     this.sendMessage({
       msg: "method",
@@ -154,7 +155,7 @@ export class RealTimeAPI {
   /**
    * Login with OAuth, with Client Token and Client Secret
    */
-  public loginWithOAuth(credToken: string, credSecret: string) {
+  public loginWithOAuth(credToken: string, credSecret: string): Observable<any> {
     let id = uuid();
     this.sendMessage({
       msg: "method",
@@ -175,7 +176,7 @@ export class RealTimeAPI {
   /**
    * getLoginObservable
    */
-  public getLoginObservable(id: string) {
+  public getLoginObservable(id: string): Observable<any> {
     let resultObservable = this.getObservableFilteredByID(id);
     let resultId: string;
 
@@ -198,7 +199,7 @@ export class RealTimeAPI {
   /**
    * Get Observalble to the Result of Method Call from Rocket.Chat Realtime API
    */
-  public callMethod(method: string, ...params: Array<{}>) {
+  public callMethod(method: string, ...params: Array<{}>): Observable<any> {
     let id = uuid();
     this.sendMessage({
       msg: "method",
@@ -216,9 +217,9 @@ export class RealTimeAPI {
     streamName: string,
     streamParam: string,
     addEvent: boolean
-  ) {
+  ): Observable<any> {
     let id = uuid();
-    let subscription = this.webSocket.multiplex(
+    return this.webSocket.multiplex(
       () => ({
         msg: "sub",
         id: id,
@@ -234,6 +235,5 @@ export class RealTimeAPI {
         message.collection === streamName &&
         message.fields.eventName === streamParam // Proper Filtering to be done. This is temporary filter just for the stream-room-messages subscription
     );
-    return subscription;
   }
 }

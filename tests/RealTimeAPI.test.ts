@@ -1,4 +1,4 @@
-import { WebSocket, Server } from "mock-socket";
+import { WebSocket, Server, Client } from "mock-socket";
 import { RealTimeAPI } from "../src";
 import { SHA256 } from "crypto-js";
 import { WebSocketSubject } from "rxjs/webSocket";
@@ -25,7 +25,7 @@ describe("RealTimeAPI tests", () => {
 
     realtimeAPI$.subscribe();
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url.
       done();
     });
@@ -36,7 +36,7 @@ describe("RealTimeAPI tests", () => {
 
     realtimeAPI$.keepAlive().subscribe(); // Should send pong to every ping message.
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url.
 
       socket.send(JSON.stringify({ msg: "ping" })); // Sending "ping" message.
@@ -52,7 +52,7 @@ describe("RealTimeAPI tests", () => {
 
     realtimeAPI$.connectToServer().subscribe(); // Should send pong to every ping message.
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url.
 
       socket.on("message", data => {
@@ -75,7 +75,7 @@ describe("RealTimeAPI tests", () => {
       const password = "password";
       realtimeAPI$.login(username, password).subscribe(); // Should send pong to every ping message.
 
-      mockServer.on("connection", (socket: WebSocket) => {
+      mockServer.on("connection", (socket: Client) => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
@@ -116,7 +116,7 @@ describe("RealTimeAPI tests", () => {
       const email = "username@email.com";
       const password = "password";
       realtimeAPI$.login(email, password).subscribe(); // Should send pong to every ping message.
-      mockServer.on("connection", (socket: WebSocket) => {
+      mockServer.on("connection", (socket: Client) => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
@@ -156,7 +156,7 @@ describe("RealTimeAPI tests", () => {
       const realtimeAPI$ = new RealTimeAPI(url);
       const token = "token";
       realtimeAPI$.loginWithAuthToken(token).subscribe(); // Should send pong to every ping message.
-      mockServer.on("connection", (socket: WebSocket) => {
+      mockServer.on("connection", (socket: Client) => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
@@ -196,7 +196,7 @@ describe("RealTimeAPI tests", () => {
       realtimeAPI$
         .loginWithOAuth(credentialToken, credentialSecret)
         .subscribe(); // Should send pong to every ping message.
-      mockServer.on("connection", (socket: WebSocket) => {
+      mockServer.on("connection", (socket: Client) => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
@@ -240,7 +240,7 @@ describe("RealTimeAPI tests", () => {
 
       realtimeAPI$.subscribe(); // Should send pong to every ping message.
 
-      mockServer.on("connection", (socket: WebSocket) => {
+      mockServer.on("connection", (socket: Client) => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
@@ -316,7 +316,7 @@ describe("RealTimeAPI tests", () => {
 
       realtimeAPI$.subscribe(); // Should send pong to every ping message.
 
-      mockServer.on("connection", (socket: WebSocket) => {
+      mockServer.on("connection", (socket: Client) => {
         expect(socket.url).toEqual(url); // Expecting websocket url.
 
         socket.on("message", data => {
@@ -373,7 +373,7 @@ describe("RealTimeAPI tests", () => {
 
     realtimeAPI$.callMethod(method, ...params).subscribe();
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url.
 
       socket.on("message", data => {
@@ -404,10 +404,10 @@ describe("RealTimeAPI tests", () => {
 
     realtimeAPI$.keepAlive().subscribe();
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
-      mockServer.on("close", (socket: WebSocket) => {
+      mockServer.on("close", (socket: Client) => {
         // Setting up Close Call listener
         expect(socket.url).toEqual(url); // Expecting websocket url. Connection Closed.
         done();
@@ -436,7 +436,7 @@ describe("RealTimeAPI tests", () => {
       done();
     });
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
       socket.send(
@@ -463,7 +463,7 @@ describe("RealTimeAPI tests", () => {
       done();
     });
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
       socket.send(
@@ -491,7 +491,7 @@ describe("RealTimeAPI tests", () => {
         .getSubscription(streamName, streamParam, addEvent)
         .subscribe();
 
-      mockServer.on("connection", (socket: WebSocket) => {
+      mockServer.on("connection", (socket: Client) => {
         expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
         socket.on("message", data => {
           if (typeof data !== "string") {
@@ -528,7 +528,7 @@ describe("RealTimeAPI tests", () => {
         .getSubscription(streamName, streamParam, addEvent)
         .subscribe();
 
-      mockServer.on("connection", (socket: WebSocket) => {
+      mockServer.on("connection", (socket: Client) => {
         expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
         channelSubscription$.unsubscribe();
@@ -585,7 +585,7 @@ describe("RealTimeAPI tests", () => {
           done();
         });
 
-      mockServer.on("connection", (socket: WebSocket) => {
+      mockServer.on("connection", (socket: Client) => {
         expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
         socket.send(
@@ -602,7 +602,7 @@ describe("RealTimeAPI tests", () => {
   it("can trigger onCompletion method when websocket disconnects", done => {
     const realtimeAPI$ = new RealTimeAPI(url);
     realtimeAPI$.subscribe();
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
       realtimeAPI$.onCompletion(() => {
@@ -618,7 +618,7 @@ describe("RealTimeAPI tests", () => {
       msg: "test message"
     };
     realtimeAPI$.subscribe();
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
       realtimeAPI$.onMessage(message => {
@@ -639,7 +639,7 @@ describe("RealTimeAPI tests", () => {
       done();
     });
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
       socket.send("Hello"); // Sending a String where JSON is expected. A "SyntaxError"
@@ -658,7 +658,7 @@ describe("RealTimeAPI tests", () => {
       done();
     });
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
       socket.send(JSON.stringify(testMessage));
@@ -675,7 +675,7 @@ describe("RealTimeAPI tests", () => {
     realtimeAPI$.subscribe();
     realtimeAPI$.sendMessage(testMessage);
 
-    mockServer.on("connection", (socket: WebSocket) => {
+    mockServer.on("connection", (socket: Client) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
 
       socket.on("message", message => {
