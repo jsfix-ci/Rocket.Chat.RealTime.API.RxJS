@@ -1,6 +1,6 @@
 {
   "name": "@lucabuening/rocket.chat.realtime.api.rxjs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Abstraction for Utilizing Rocket.Chat's Realtime API Methods with RxJS. Forked by Luca Büning",
   "main": "lib/index.js",
   "directories": {
@@ -9,7 +9,7 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "node-notifier": "^10.0.0",
-    "rxjs": "^6.5.3",
+    "rxjs": "^6.6.7",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -52,7 +52,9 @@
     "Abstraction"
   ],
   "author": "Viraj Trivedi <inf3cti0n95@gmail.com>",
-  "maintainers": ["Luca Büning <lucabuening@gmail.com>"],
+  "maintainers": [
+    "Luca Büning <lucabuening@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/lucabuening/Rocket.Chat.RealTime.API.RxJS/issues"
