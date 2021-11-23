@@ -62,11 +62,8 @@ export class RealTimeAPI {
     errorHandler?: ((error: any) => void) | undefined,
     completionHandler?: (() => void) | undefined
   ): void {
-    this.getObservable().subscribe({
-      next: messageHandler,
-      error: errorHandler,
-      complete: completionHandler
-    });
+    this.getObservable()
+      .subscribe(messageHandler, errorHandler, completionHandler);
   }
 
   /**

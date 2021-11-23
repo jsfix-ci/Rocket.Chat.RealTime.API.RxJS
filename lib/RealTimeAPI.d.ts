@@ -9,7 +9,7 @@ export declare class RealTimeAPI {
     /**
      * Returns the Observable to the RealTime API Socket
      */
-    getObservable(): Observable<any>;
+    getObservable(): WebSocketSubject<any>;
     /**
      * Disconnect the WebSocket Connection between client and RealTime API
      */

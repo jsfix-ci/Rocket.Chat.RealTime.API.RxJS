@@ -1,6 +1,6 @@
 {
   "name": "@lucabuening/rocket.chat.realtime.api.rxjs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Abstraction for Utilizing Rocket.Chat's Realtime API Methods with RxJS. Forked by Luca Büning",
   "main": "lib/index.js",
   "directories": {
@@ -9,7 +9,7 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "node-notifier": "^10.0.0",
-    "rxjs": "^7.4.0",
+    "rxjs": "^6.5.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
